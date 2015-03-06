@@ -46,7 +46,16 @@ namespace Our.Umbraco.PropertyConverters
         /// </returns>
         public bool IsConverter(PublishedPropertyType propertyType)
         {
-            return propertyType.PropertyEditorAlias.Equals(Constants.PropertyEditors.ContentPickerAlias);
+            // Converter for content picker, unless picker for umbracoInternalRedirectId or umbracoRedirect - those must
+            // remain int
+            if (Constants.PropertyEditors.ContentPickerAlias.Equals(propertyType.PropertyEditorAlias)
+                && propertyType.PropertyTypeAlias != Constants.Conventions.Content.InternalRedirectId
+                && propertyType.PropertyTypeAlias != Constants.Conventions.Content.Redirect)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
